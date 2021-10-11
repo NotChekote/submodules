@@ -4,7 +4,7 @@ set -eu
 
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../.." && pwd )"
 
-EXPECTED_VERSION=2.0.13
+EXPECTED_VERSION=2.1.9
 
 #############################################
 # Download the sha256-sum file from composer page for the expected version
@@ -36,7 +36,7 @@ clearComposerSHA() {
 #   $ROOT root project directory
 #
 # Returns:
-#   1 when the validation pass 
+#   1 when the validation pass
 #   0 when the sha validation fail
 #
 #############################################
