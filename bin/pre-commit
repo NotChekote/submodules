@@ -35,7 +35,7 @@ staged_files=$(git status --short | grep '^[MARC]' | awk -F " " '{print $NF}')
 files=$(get_fixable_files "$staged_files")
 
 if [[ "$files" != "" ]]; then
-  "${ROOT}/bin/style-fixer" ${files##*( )}
+  style-fixer ${files##*( )}
 fi
 
 if [[ "$files" != "" ]]; then

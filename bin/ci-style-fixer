@@ -2,40 +2,7 @@
 
 set -euo pipefail
 
-#######################################
-# Resolves a relative path from a symlink to a fully qualified path
-#
-# Arguments:
-#   1 the symlink to resolve (NOT the source, but the link)
-#   2 the relative path from the link source to resolve
-#######################################
-get_symlink_relative_path () {
-  local symlink="$1"
-  local relativePath="$2"
-
-  local symlinkPath
-  local symlinkDir
-  local sourceDir
-  local resolvedPath
-
-  # Find the source of the symlink
-  symlinkPath=$(readlink "$symlink")
-
-  # Get the symlink's directory
-  symlinkDir="$(cd "$(dirname "$symlink")" && pwd)"
-
-  # Change to the symlink's directory, then from there follow the symlink and get the source's directory
-  sourceDir="$(cd "$symlinkDir" && cd "$(dirname "$symlinkPath")" && pwd)"
-
-  # Resolve the relative path from the source's directory
-  resolvedPath="$(cd "$sourceDir/$relativePath" && pwd)"
-
-  echo "$resolvedPath"
-}
-
-# The submodules dir is the parent of this script's dir, but since this script will be called via a symlink,
-# we can't get the parent of $0 directly. So instead, we get the parent of the symlink source (this script).
-submodules=$(get_symlink_relative_path "$0" '..')
+submodules="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 
 # Include lib functions
 . "$submodules"/lib/git.sh
@@ -50,7 +17,7 @@ submodules=$(get_symlink_relative_path "$0" '..')
 fix_and_stage_styles () {
     local files="$1"
 
-    "$submodules"/bin/style-fixer "$files"
+    style-fixer "$files"
     echo "$files" | xargs git add
 }
 

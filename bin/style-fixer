@@ -7,9 +7,7 @@ if [ "$#" == 0 ]; then
   exit 1
 fi
 
-dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-
-. "$dir"/get_colors
+. get_colors
 
 #######################################
 # Check if a string contains another string
@@ -57,7 +55,7 @@ if [[ "$front_end_files" != "" ]]; then
 
   # Suppress "Double quote to prevent globbing and word splitting.", because we intend word-splitting here.
   # shellcheck disable=SC2086
-  "$dir/prettier-eslint" ${front_end_files##*( )} --write --single-quote --print-width=120
+  prettier-eslint ${front_end_files##*( )} --write --single-quote --print-width=120
 fi
 
 # Gherkin files
@@ -67,7 +65,7 @@ if [[ "$gherkin_files" != "" ]]; then
 
   # Suppress "Double quote to prevent globbing and word splitting.", because we intend word-splitting here.
   # shellcheck disable=SC2086
-  "$dir"/gherkin-cs-fixer ${gherkin_files##*( )}
+  gherkin-cs-fixer ${gherkin_files##*( )}
 fi
 
 # PHP files
@@ -92,7 +90,7 @@ if [[ "$java_files" != "" ]]; then
 
   # Suppress "Double quote to prevent globbing and word splitting.", because we intend word-splitting here.
   # shellcheck disable=SC2086
-  "$dir"/java-cs-fixer --replace --aosp ${java_files##*( )}
+  java-cs-fixer --replace --aosp ${java_files##*( )}
 fi
 
 echo -e "$GREEN Success!!!$NC"

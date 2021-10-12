@@ -2,15 +2,13 @@
 
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "$0")"/../ && pwd)"
-
 # File already exists
-if [ -f "$ROOT"/.npmrc ]; then
+if [ -f .npmrc ]; then
   exit 0
 fi
 
 echo "Copying default .npmrc file"
-cp "$ROOT"/.npmrc.example "$ROOT"/.npmrc
+cp .npmrc.example .npmrc
 
 : "${NPM_TOKEN:=""}"
 
@@ -23,8 +21,8 @@ fi
 # Replace token with env variable
 if [[ "$(uname)" == 'Darwin' ]]; then
   # macOs
-  sed -i '' "s/TOKEN/$NPM_TOKEN/" "$ROOT"/.npmrc
+  sed -i '' "s/TOKEN/$NPM_TOKEN/" .npmrc
 else
   # Linux
-  sed -i "s/TOKEN/$NPM_TOKEN/" "$ROOT"/.npmrc
+  sed -i "s/TOKEN/$NPM_TOKEN/" .npmrc
 fi

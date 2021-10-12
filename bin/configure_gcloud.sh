@@ -2,8 +2,6 @@
 
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "$BASH_SOURCE[0]")/../.." && pwd)"
-
 echo "Change owner and group for gcloud config dir..."
 sudo chown -R circleci:circleci "$HOME/.config/gcloud"
 

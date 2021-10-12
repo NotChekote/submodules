@@ -2,11 +2,10 @@
 
 set -euo pipefail
 
-dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../" && pwd )"
+ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../../" && pwd )"
 
-. ${dir}/get_local_user
-. ${dir}/get_images
+. get_local_user
+. get_images
 . "$ROOT"/docker/lib/volumes.sh
 
 docker run \

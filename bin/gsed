@@ -2,11 +2,9 @@
 
 set -eu
 
-dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-
-. ${dir}/get_local_user
-. ${dir}/get_tty
-. ${dir}/get_images
+. get_local_user
+. get_tty
+. get_images
 
 docker run \
     ${TTY} \

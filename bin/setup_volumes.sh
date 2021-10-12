@@ -3,7 +3,7 @@
 set -eu
 
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../../" && pwd )"
-. "$ROOT"/docker/lib/setup_nfs_functions.sh
+. "$ROOT"/submodules/lib/setup_nfs_functions.sh
 . "$ROOT"/docker/lib/volumes.sh
 
 if [[ "$(uname)" == 'Darwin' ]]; then
