@@ -2,7 +2,7 @@
 
 set -eu
 
-ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../" && pwd )"
+ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../../" && pwd )"
 
 . get_local_user
 . get_tty

@@ -22,7 +22,7 @@ if [[ -z "${SNAP_NAME:=''}" ]]; then
   exit 1
 fi
 
-ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../.." && pwd )"
+ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../../" && pwd )"
 
 remote="upstream/master"
 
