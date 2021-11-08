@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
 
-set -eu
+set -euo pipefail
 
 get_fixable_files () {
   local files=$1
-
-  fixable_files=""
+  local fixable_files=""
 
   for file in $files
   do
@@ -13,7 +12,7 @@ get_fixable_files () {
       fixable_files="$fixable_files $file"
     fi
   done
-  echo $fixable_files
+  echo "$fixable_files"
 }
 
 if [[ -z "${SNAP_NAME:=''}" ]]; then
@@ -22,22 +21,18 @@ if [[ -z "${SNAP_NAME:=''}" ]]; then
   exit 1
 fi
 
-ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../../" && pwd )"
-
-remote="upstream/master"
-
-if [[ "${CI:-}" == true ]] ; then
-  remote="origin/master"
-fi
-
 staged_files=$(git status --short | grep '^[MARC]' | awk -F " " '{print $NF}')
 
 files=$(get_fixable_files "$staged_files")
 
 if [[ "$files" != "" ]]; then
+  # We actually want splitting here
+  # shellcheck disable=SC2086
   style-fixer ${files##*( )}
 fi
 
 if [[ "$files" != "" ]]; then
+  # We actually want splitting here
+  # shellcheck disable=SC2086
   git add $files
 fi

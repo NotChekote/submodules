@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -eu
+set -euo pipefail
 
 ######################################################
 # Delete old versions of service on Google App Engine.
@@ -43,16 +43,18 @@ delete_old_versions() {
 #   1 the name of the service on GAE
 ######################################################
 stop_previous_versions() {
+    local ids
+
     echo -e "\nStopping all previous serving versions of $1"
     # Fetch all previous serving versions sorted by creation time in desc. order.
     # Remove headings and start from second line.
-    local ids=$(gcloud app versions list --service $1 \
+    ids=$(gcloud app versions list --service "$1" \
         --filter="version.servingStatus=serving" \
         --sort-by="~version.createTime" \
         --format="table[no-heading](version.id)" | tail -n +2)
     for version in $ids
     do
         echo -e "\nStopping version"
-        gcloud -q --verbosity=debug app versions stop --service $1 "${version}"
+        gcloud -q --verbosity=debug app versions stop --service "$1" "${version}"
     done
 }

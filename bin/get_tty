@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
-set -eu
+set -euo pipefail
+
 TTY="";
 if [[ -t 0 ]] ; then
   TTY="-t";
 fi
+
+export TTY

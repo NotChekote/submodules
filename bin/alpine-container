@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+root="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../../" && pwd )"
+
+. get_tty
+. "$root/submodules/lib/docker_network.sh"
+. "$root/docker/lib/volumes.sh"
+
+# We need word-splitting for the -t option to work properly
+# shellcheck disable=SC2086
+docker run \
+    -i \
+    $TTY \
+    -w /workdir \
+    --env-file "$root/docker/.env" \
+    --mount source=$PROJECT_VOLUME,target=/workdir \
+    --net "$DOCKER_NETWORK" \
+    --rm \
+    us.gcr.io/docker-1000101/alpine:3.14.2 "$@"

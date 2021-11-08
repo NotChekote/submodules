@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 # Determines the UID of the user running the Docker containers.
 
 if [ "$(uname)" == 'Linux' ]; then

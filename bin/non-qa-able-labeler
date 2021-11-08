@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -eu
+set -euo pipefail
 
 project_name=$1
 repo_name=$2
@@ -9,34 +9,34 @@ auth_token=$4
 
 # List of repositories considered not QA able
 non_qa_able_repos=(
-  'laravel-sodium',
-  'submodules',
-  'consultation-provider',
-  'gherking-cs-fixer',
-  'FlexibleMink',
-  'iLab-php-parser',
-  'phpunit-parallel-runner',
-  'spinify-php-client',
-  'medivo-client',
-  'BehatPaypalContext',
-  'behat-google-place-autocomplete',
-  'BehatFindALabContext',
-  'docker-hub',
-  'docker-php-cs-fixer',
-  'geo-location',
-  'iLab-php-client',
-  'PaymentProcessor',
-  'quest-client',
-  'Scripts',
-  'google-maps-mock-api',
-  'wheniwork-php-client',
-  'livechat-spinify-bridge',
-  'docker-ng-cli-karma',
-  'gae-stop-old-versions-orb',
-  'gae-prune-old-versions-orb',
-  '.github',
-  'IP-Phone-Provisioning',
-  'Team-Standards-and-Procedures',
+  '.github'
+  'BehatFindALabContext'
+  'BehatPaypalContext'
+  'FlexibleMink'
+  'IP-Phone-Provisioning'
+  'PaymentProcessor'
+  'Scripts'
+  'Team-Standards-and-Procedures'
+  'behat-google-place-autocomplete'
+  'consultation-provider'
+  'docker-hub'
+  'docker-ng-cli-karma'
+  'docker-php-cs-fixer'
+  'gae-prune-old-versions-orb'
+  'gae-stop-old-versions-orb'
+  'geo-location'
+  'gherkin-cs-fixer'
+  'google-maps-mock-api'
+  'iLab-php-client'
+  'iLab-php-parser'
+  'laravel-sodium'
+  'livechat-spinify-bridge'
+  'medivo-client'
+  'phpunit-parallel-runner'
+  'quest-client'
+  'spinify-php-client'
+  'submodules'
+  'wheniwork-php-client'
 )
 
 #######################################
@@ -55,7 +55,7 @@ apply_no_qa_label () {
         -H "Content-Type: application/json" \
         --request POST \
         --data '{"labels": ["No QA"]}' \
-        -S https://api.github.com/repos/${project_name}/${repo_name}/issues/${pull_number}/labels
+        -S "https://api.github.com/repos/$project_name/$repo_name/issues/$pull_number/labels"
 }
 
 #######################################
@@ -75,11 +75,11 @@ remove_no_qa_label_if_exists () {
         -H "Accept: application/vnd.github.shadow-cat-preview+json" \
         -H "Content-Type: application/json" \
         --request DELETE \
-        -S https://api.github.com/repos/${project_name}/${repo_name}/issues/${pull_number}/labels/No%20QA
+        -S "https://api.github.com/repos/$project_name/$repo_name/issues/$pull_number/labels/No%20QA"
 }
 
 #######################################
-# Checks if the Repository is QA'able
+# Checks if the Repository is QA-able
 # If it is not it will add the No QA
 # label and exit
 #
@@ -88,9 +88,16 @@ remove_no_qa_label_if_exists () {
 #   repo_name
 #######################################
 label_and_exit_if_repo_not_qa_able () {
-  if [[ " ${non_qa_able_repos[@]} " =~ "$repo_name" ]]; then
+  local match=0
+  for non_qa_able_repo in "${non_qa_able_repos[@]}"; do
+      if [[ $non_qa_able_repo = "$repo_name" ]]; then
+          match=1
+          break
+      fi
+  done
+
+  if [[ $match = 1 ]]; then
     apply_no_qa_label
-    exit 0
   fi
 }
 
@@ -103,17 +110,21 @@ remove_label_and_exit_if_files_are_qa_able () {
   for file in $(git diff --name-only origin/master...HEAD)
   do
     local non_comment_updates=""
-    local qa_able_files="$(echo "$file" | grep -v '.feature\|features/\|tests/\|.md\|submodules\|.circleci')"
+    local qa_able_files
+
+    set +e
+    qa_able_files="$(echo "$file" | grep -v '.feature\|features/\|tests/\|.md\|submodules\|.circleci')"
+    set -e
 
     if [[ ! -f "$file" ]]; then
        non_comment_updates="File was deleted"
     else
-       non_comment_updates="$(git diff -G'(^[^\*# /])|(^#\w)|(^\s+[^\*#/])'  origin/master...HEAD $file)"
+       non_comment_updates="$(git diff -G'(^[^\*# /])|(^#\w)|(^\s+[^\*#/])'  origin/master...HEAD "$file")"
     fi
 
     echo "Checking file $file"
 
-    if [[ ! -z "$qa_able_files" && ! -z "$non_comment_updates" ]]; then
+    if [[ -n "$qa_able_files" && -n "$non_comment_updates" ]]; then
         echo ""
         echo "Removing QA label due to: "
         echo "$non_comment_updates"

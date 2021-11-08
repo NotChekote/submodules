@@ -1,12 +1,3 @@
 #!/usr/bin/env bash
 
-set -eu
-
-. get_local_user
-. get_tty
-. get_images
-
-docker run \
-    ${TTY} \
-    --rm \
-    ${SED_REPO}:${SED_TAG} sed "$@"
+alpine-container sed "$@"

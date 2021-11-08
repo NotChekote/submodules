@@ -1,16 +1,18 @@
 #!/usr/bin/env bash
 
-set -eu
+set -euo pipefail
 
-. get_local_user
+root="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../../" && pwd )"
+
 . get_tty
-. get_images
+. "$root/docker/lib/volumes.sh"
+. "$root/submodules/lib/docker_host_user_id.sh"
 
 docker run \
-    ${LOCAL_USER_ID:-} \
-    ${TTY} \
-    --rm \
+    -e LOCAL_USER_ID="$DOCKER_HOST_USER_ID" \
     -i \
-    -v $(pwd):/var/www:delegated \
+    $TTY \
     -w /var/www \
-    ${PRETTIER_ESLINT_IMAGE} "$@"
+    --mount source="$PROJECT_VOLUME",target=/var/www \
+    --rm \
+    us.gcr.io/docker-1000101/prettier-eslint:12.8.0-5.0.1-alpine "$@"

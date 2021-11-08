@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
 
-set -eu
+set -euo pipefail
+
+root="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../../" && pwd )"
 
 . get_tty
-. get_local_user
-. get_images
+. "$root/docker/lib/volumes.sh"
+. "$root/submodules/lib/docker_host_user_id.sh"
 
 docker run \
-    ${LOCAL_USER_ID:-} \
-    ${TTY} \
+    -e LOCAL_USER_ID="$DOCKER_HOST_USER_ID" \
     -i \
+    $TTY \
+    --mount source="$PROJECT_VOLUME",target=/workdir \
     --rm \
-    -v $(pwd):/workdir:delegated \
-    ${GHERKIN_CS_FIXER_IMAGE} "$@"
+    medology/gherkin-cs-fixer:2021-07-28 "$@"

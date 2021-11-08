@@ -1,39 +1,39 @@
 #!/usr/bin/env bash
 
-set -eu
+set -euo pipefail
 
-ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../../../" && pwd )"
+root="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../../../" && pwd )"
 
-EXPECTED_VERSION=2.1.9
+expected_version=2.1.9
 
 #############################################
 # Download the sha256-sum file from composer page for the expected version
 #
 # Globals:
-#   $EXPECTED_VERSION the expected composer version to install/validate
-#   $ROOT             root project directory
+#   $expected_version the expected composer version to install/validate
+#   $root             root project directory
 #
 #############################################
 downloadComposerSHA() {
   # Download the original sha256 sum for the expected version
-  curl -L https://getcomposer.org/download/${EXPECTED_VERSION}/composer.phar.sha256sum > "$ROOT"/bin/composer.sha256sum
+  curl -L https://getcomposer.org/download/${expected_version}/composer.phar.sha256sum > "$root/bin/composer.sha256sum"
 }
 
 #############################################
 # Delete the downloaded sha256-sum file
 #
 # Globals:
-#   $ROOT root project directory
+#   $root root project directory
 #############################################
 clearComposerSHA() {
-  rm "$ROOT"/bin/composer.sha256sum &> /dev/null || TRUE
+  rm "$root/bin/composer.sha256sum" &> /dev/null || TRUE
 }
 
 #############################################
 # Validate the sha256sum against the existing composer file
 #
 # Globals:
-#   $ROOT root project directory
+#   $root root project directory
 #
 # Returns:
 #   1 when the validation pass
@@ -41,12 +41,16 @@ clearComposerSHA() {
 #
 #############################################
 isValidComposerSHA() {
-  SHA256_SUM=$(cat "$ROOT"/bin/composer.sha256sum)
+  local parsed_sha256_sum
+  local sha256_sum
+  local validation_result
+
+  sha256_sum=$(cat "$root/bin/composer.sha256sum")
   # The file includes sha256 string and file name with phar extension
   # The next method replaces the .phar from the string
-  PARSED_SHA256_SUM="${SHA256_SUM/ composer.phar/}"
-  VALIDATION_RESULT=$(echo "$PARSED_SHA256_SUM "$ROOT"/bin/composer" | shasum -c -a 256) || TRUE
-  if [ "$VALIDATION_RESULT" == "$ROOT/bin/composer: OK" ]; then
+  parsed_sha256_sum="${sha256_sum/ composer.phar/}"
+  validation_result=$(echo "$parsed_sha256_sum $root/bin/composer" | shasum -c -a 256) || TRUE
+  if [ "$validation_result" == "$root/bin/composer: OK" ]; then
     return
   fi
 
@@ -58,29 +62,31 @@ isValidComposerSHA() {
 # if exists validates the file sha256sum match the expected version
 #
 # Globals:
-#   $EXPECTED_VERSION the expected composer version to install/validate
-#   $ROOT             root project directory
+#   $expected_version the expected composer version to install/validate
+#   $root             root project directory
 #
 #############################################
 checkExistingInstallation() {
-  if [ -e "$ROOT"/bin/composer ]; then
+  if [ -e "$root/bin/composer" ]; then
+    local found_version
+
     echo "Checking Composer version..."
-    FOUND_VERSION=$( \
-        cd "$ROOT" && \
-        "$ROOT"/bin/composer --version | \
+    found_version=$( \
+        cd "$root" && \
+        "$root/bin/composer" --version | \
         tail -1 | \
         awk '{print $3}' \
     )
 
     if isValidComposerSHA; then
         # Version is as expected. We're done.
-        echo "Composer ${EXPECTED_VERSION} already installed."
+        echo "Composer ${expected_version} already installed."
         clearComposerSHA
         exit 0
     else
         # Version does not match. Remove it.
-        echo "Removing Composer version ${FOUND_VERSION}..."
-        rm "$ROOT"/bin/composer
+        echo "Removing Composer version ${found_version}..."
+        rm "$root/bin/composer"
     fi
   fi
 }
@@ -89,21 +95,21 @@ checkExistingInstallation() {
 # Download the desired composer binary
 #
 # Globals:
-#   $EXPECTED_VERSION the expected composer version to install/validate
-#   $ROOT             root project directory
+#   $expected_version the expected composer version to install/validate
+#   $root             root project directory
 #
 #############################################
 downloadComposerBinary() {
   # Install composer
-  echo "Installing Composer ${EXPECTED_VERSION}..."
-  curl -L https://getcomposer.org/download/${EXPECTED_VERSION}/composer.phar > "$ROOT"/bin/composer
+  echo "Installing Composer ${expected_version}..."
+  curl -L https://getcomposer.org/download/${expected_version}/composer.phar > "$root/bin/composer"
 }
 
 #############################################
 # Validate the sha256sum of the downloaded file
 #
 # Globals:
-#   $ROOT root project directory
+#   $root root project directory
 #
 #############################################
 validateDownloadedComposer() {
@@ -113,7 +119,7 @@ validateDownloadedComposer() {
       echo "passed"
   else
       echo "ERROR: composer's sha256sum doesn't match. Download it again."
-      rm "$ROOT"/bin/composer
+      rm "$root/bin/composer"
       clearComposerSHA
       exit 1
   fi
@@ -123,12 +129,12 @@ validateDownloadedComposer() {
 # Fix execution permissions
 #
 # Globals:
-#   $ROOT root project directory
+#   $root root project directory
 #
 #############################################
 fixComposerPermissions() {
   echo "Setting composer permissions..."
-  chmod 755 "$ROOT"/bin/composer
+  chmod 755 "$root/bin/composer"
 }
 
 #############################################
@@ -154,4 +160,4 @@ fixComposerPermissions
 # Initialize .composer directory
 initializeComposerDir
 
-echo "Composer v${EXPECTED_VERSION} installation complete."
+echo "Composer v${expected_version} installation complete."

@@ -91,5 +91,7 @@ git.index.staged () {
     esac
   done
 
+  # We actually want splitting here
+  # shellcheck disable=SC2086
   git status --short ${gitFlags:-} ${extensionFilters:-} | { grep "^[$gitFilters]" || true; } | cut -c 4-
 }

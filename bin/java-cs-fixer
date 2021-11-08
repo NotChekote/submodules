@@ -1,18 +1,17 @@
 #!/usr/bin/env bash
 
-set -eu
+set -euo pipefail
 
-ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../../" && pwd )"
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../" && pwd)"
 
-. get_local_user
+. "$root/docker/lib/volumes.sh"
+. "$root/submodules/lib/docker_host_user_id.sh"
 . get_tty
-. get_images
-. "$ROOT"/docker/lib/volumes.sh
 
 docker run \
-    ${LOCAL_USER_ID:-} \
+    -e LOCAL_USER_ID="$DOCKER_HOST_USER_ID" \
     $TTY \
     --rm \
     -i \
-    --mount source=$PROJECT_VOLUME,target=/workdir \
-    $JAVA_STYLER_IMAGE "$@"
+    --mount source="$PROJECT_VOLUME",target=/workdir \
+    us.gcr.io/docker-1000101/java-cs-fixer:jdk15-1.9-9ee0482 "$@"

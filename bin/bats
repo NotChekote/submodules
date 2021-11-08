@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
 
-set -eu
+set -euo pipefail
+
+root="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../../" && pwd )"
 
 . get_tty
-. get_local_user
-. get_images
+. "$root/submodules/lib/docker_host_user_id.sh"
+. "$root/docker/lib/volumes.sh"
 
 docker run \
-      ${LOCAL_USER_ID:-} \
-      -v $(pwd):/workdir \
-      ${TTY} \
+      -e LOCAL_USER_ID="$DOCKER_HOST_USER_ID" \
       -i \
+      $TTY \
+      --mount source="$PROJECT_VOLUME",target=/workdir \
       --rm \
-      ${BATS_IMAGE} bats "$@"
+      us.gcr.io/docker-1000101/bats:php7.3-laravel5.7 bats "$@"

@@ -40,8 +40,10 @@ apply_changes_and_exit () {
 # Filter fixable files
 #######################################
 get_fixable_files () {
+    local files
+    local fixable_files=""
+
     files="$(git diff --diff-filter=CMTRA --name-only origin/master...HEAD)"
-    fixable_files=""
     for file in $files
     do
       if echo "$file" | grep 'css\|scss\|html\|js\|ts\|php\|java\|feature\|twig'; then

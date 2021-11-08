@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+root="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../.." && pwd )"
+
+# Include lib functions
+. "$root/submodules/lib/git.sh"
+
+git.branch.exit-if-master "Skipping directory enforcement"
+
+files=$(git diff --diff-filter=CMTRA --name-only origin/master...HEAD | { grep "^app/Rules/*" || true; })
+
+if [ -n "$files" ]; then
+  # We actually want word splitting to occur here.
+  # shellcheck disable=SC2086
+  dse --config="./dse_config.yml" $files
+fi

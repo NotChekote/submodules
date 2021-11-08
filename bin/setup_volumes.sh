@@ -1,29 +1,29 @@
 #!/usr/bin/env bash
 
-set -eu
+set -euo pipefail
 
-ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../../" && pwd )"
-. "$ROOT"/submodules/lib/setup_nfs_functions.sh
-. "$ROOT"/docker/lib/volumes.sh
+root="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../../" && pwd )"
+. "$root/submodules/lib/setup_nfs_functions.sh"
+. "$root/docker/lib/volumes.sh"
 
 if [[ "$(uname)" == 'Darwin' ]]; then
   # On mac, setup NFS server and create NFS volumes
-  TYPE='nfs'
-  OPTS='addr=host.docker.internal,rw,nolock,hard,nointr,nfsvers=3'
+  type='nfs'
+  opts='addr=host.docker.internal,rw,nolock,hard,nointr,nfsvers=3'
   setupNfsServer
 else
   # On linux, create local bind volumes
-  TYPE='none'
-  OPTS='bind'
+  type='none'
+  opts='bind'
 fi
 
 # Loop over each of the volumes
-for VOLUME in "${!VOLUMES[@]}"; do
+for volume in "${!VOLUMES[@]}"; do
   # And check if it exists
-  if ! docker volume ls | grep -qF "${VOLUME}"; then
+  if ! docker volume ls | grep -qF "$volume"; then
     # If not, then create it
-    createDockerVolume "${VOLUME}" "${VOLUMES[$VOLUME]}" "${TYPE}" "${OPTS}"
+    createDockerVolume "$volume" "${VOLUMES[$volume]}" "$type" "${opts}"
   else
-    recreateVolumeIfMountFromDifferentFolder "${VOLUME}" "${VOLUMES[$VOLUME]}" "${TYPE}" "${OPTS}"
+    recreateVolumeIfMountFromDifferentFolder "$volume" "${VOLUMES[$volume]}" "$type" "$opts"
   fi
 done

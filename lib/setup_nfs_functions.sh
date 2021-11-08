@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -eu
+set -euo pipefail
 
 #######################################
 # Setup NFS server on Mac
@@ -9,6 +9,9 @@ setupNfsServer() {
   if showmount -e | grep -qF '/System/Volumes/Data'; then
     echo "NFS exports ready"
   else
+    local uid
+    local gid
+
     echo "Setting up the NFS server, your password will be required..."
 
     # Allow connections from any port
@@ -64,9 +67,9 @@ createDockerVolume() {
 
   echo "Creating Docker Volume ${volume_name} for path ${volume_path}"
 
-  if [[ ! -e ${volume_path} ]]; then
+  if [[ ! -e "${volume_path}" ]]; then
     echo "${volume_path} doesn't exist, creating the directory..." 1>&2
-    mkdir ${volume_path}
+    mkdir "${volume_path}"
   elif [[ ! -d ${volume_path} ]]; then
     echo "${volume_path} already exists but is not a directory" 1>&2
   fi
@@ -97,7 +100,7 @@ recreateVolumeIfMountFromDifferentFolder() {
   local volume_path=$2
   local volume_type=$3
   local volume_opts=$4
-  if [[ $(docker volume inspect --format '{{.Options.device}}' ${volume_name} | sed 's/^://') != "${volume_path}" ]]; then
+  if [[ $(docker volume inspect --format '{{.Options.device}}' "${volume_name}" | sed 's/^://') != "${volume_path}" ]]; then
     docker volume rm "${volume_name}"
     createDockerVolume "${volume_name}" "${volume_path}" "${volume_type}" "${volume_opts}"
   fi

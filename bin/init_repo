@@ -1,36 +1,38 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 echo "Recreate Git Repository..."
 rm -rf .git
 git init
 echo "Git repository recreated"
 echo "Install docker configurations? (y/N)"
-read arg_docker
+read -r arg_docker
 if [ "$arg_docker" == "y" ]; then
   mkdir docker
   git submodule add -b docker-lib git@github.com:Medology/submodules.git docker/lib
   echo "Install docker-node? (y/N)"
-  read arg_docker_node
+  read -r arg_docker_node
   if [ "$arg_docker_node" == "y" ]; then
     git submodule add -b docker-node git@github.com:Medology/submodules.git docker/node
   fi
   echo "Install docker-php? (y/N)"
-  read arg_docker_php
+  read -r arg_docker_php
   if [ "$arg_docker_php" == "y" ]; then
     git submodule add -b docker-php git@github.com:Medology/submodules.git docker/php
   fi
   echo "Install docker-php-debug? (y/N)"
-  read arg_docker_php_debug
+  read -r arg_docker_php_debug
   if [ "$arg_docker_php_debug" == "y" ]; then
     git submodule add -b docker-php-debug git@github.com:Medology/submodules.git docker/php-debug
   fi
   echo "Install docker-web? (y/N)"
-  read arg_docker_web
+  read -r arg_docker_web
   if [ "$arg_docker_web" == "y" ]; then
     git submodule add -b docker-web git@github.com:Medology/submodules.git docker/web
   fi
   echo "Install docker-phpmyadmin? (y/N)"
-  read arg_docker_phpmyadmin
+  read -r arg_docker_phpmyadmin
   if [ "$arg_docker_phpmyadmin" == "y" ]; then
     git submodule add -b docker-phpmyadmin git@github.com:Medology/submodules.git docker/phpmyadmin
   fi

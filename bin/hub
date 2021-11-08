@@ -1,17 +1,21 @@
 #!/usr/bin/env bash
 
-set -eu
+set -euo pipefail
+
+root="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../../" && pwd )"
 
 . get_tty
-. get_local_user
+. "$root/docker/lib/volumes.sh"
+. "$root/submodules/lib/docker_host_user_id.sh"
 
+# note: The .gitconfig mount cannot use a Docker Volume since it is a file, not a dir.
 docker run \
-    ${LOCAL_USER_ID:-} \
-    --rm \
-    ${TTY} \
+    -e LOCAL_USER_ID="$DOCKER_HOST_USER_ID" \
     -i \
-    -v $(pwd):/workdir:delegated \
+    $TTY \
     -v ~/.gitconfig:/home/user/.gitconfig:delegated \
-    -v ~/.ssh:/home/user/.ssh:delegated \
-    -v ~/.config/hub:/home/user/.config/hub:delegated \
+    --mount source="$PROJECT_VOLUME",target=/workdir \
+    --mount source=user_ssh,target=/home/user/.ssh \
+    --mount source=user_config,target=/home/user/.config \
+    --rm \
     gcr.io/docker-1000101/hub:2.14.2-a1ab6f08a699bc1c22b131536e4c05db65c53eff "$@"

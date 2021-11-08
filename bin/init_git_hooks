@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -eu
+set -euo pipefail
 
 dir="$(pwd)"
 hooks="$dir"/.git/hooks
@@ -18,8 +18,10 @@ echo "Checking Git hooks..."
 # hooks folder, exits if answer is no
 #######################################
 exit_if_not_willing_to_remove_dir () {
+    local response
+
     while true; do
-        read -p "Symbolic link is NOT configured correctly. We need to remove the git hooks directory. Is that okay? (y/n)" response
+        read -r -p "Symbolic link is NOT configured correctly. We need to remove the git hooks directory. Is that okay? (y/n)" response
         case "$response" in
             [Yy]* ) break;;
             [Nn]* )  echo "Git hook initialization canceled by user"; exit 1;;
@@ -41,7 +43,7 @@ create_sym_link () {
 
 if [[ -L "$hooks" ]]; then
   echo "Git hooks symbolic link is already in place."
-  if [[ `readlink "$hooks"` == ../hooks ]]; then
+  if [[ "$(readlink "$hooks")" == ../hooks ]]; then
     echo "Symbolic link is configured correctly."
   else
     if [[ "${CI:-}" != true ]] ; then
