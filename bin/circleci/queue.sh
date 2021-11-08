@@ -24,8 +24,8 @@ queue_job_name=$2
 echo "This build for job $queue_job_name will be blocked until all previous builds complete."
 echo "Max Queue Time: $max_time minutes."
 
-root="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../.." && pwd )"
-source "$root/submodules/lib/circle.sh"
+root="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../../.." && pwd )"
+source "$root/submodules/lib/circleci.sh"
 wait_time=0
 loop_time=30
 max_time_seconds=$((max_time * 60))
