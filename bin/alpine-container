@@ -5,7 +5,7 @@ set -euo pipefail
 root="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../../" && pwd )"
 
 . get_tty
-. "$root/submodules/lib/docker_network.sh"
+. "$root/submodules/bin/get_docker_network.sh"
 . "$root/docker/lib/volumes.sh"
 
 # We need word-splitting for the -t option to work properly
