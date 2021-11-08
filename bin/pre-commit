@@ -21,7 +21,9 @@ if [[ -z "${SNAP_NAME:=''}" ]]; then
   exit 1
 fi
 
+set +e
 staged_files=$(git status --short | grep '^[MARC]' | awk -F " " '{print $NF}')
+set -e
 
 files=$(get_fixable_files "$staged_files")
 
