@@ -9,7 +9,7 @@ root="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../.." && pwd )"
 
 git.branch.exit-if-master "Skipping directory enforcement"
 
-files=$(git diff --diff-filter=CMTRA --name-only origin/master...HEAD | { grep "^app/Rules/*" || true; })
+files=$(git diff --diff-filter=CMTRA --name-only origin/master...HEAD | { grep "^app/Rules/*\|^app/Listeners/*\|^app/Observers/*" || true; })
 
 if [ -n "$files" ]; then
   # We actually want word splitting to occur here.
