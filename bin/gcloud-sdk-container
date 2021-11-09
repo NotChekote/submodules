@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-root="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/../ && pwd )"
+root="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../../" && pwd )"
 
 . get_tty
 . "$root/submodules/lib/docker_host_user_id.sh"
