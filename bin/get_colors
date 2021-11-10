@@ -2,6 +2,12 @@
 
 set -euo pipefail
 
-export RED='\033[0;31m'
+export BLACK_ON_GREEN='\e[42m\e[30m'
+export BLACK_ON_RED='\e[41m\e[30m'
 export GREEN='\033[0;32m'
+export LIGHT_GREEN='\e[92m'
 export NC='\033[0m'
+export RED='\033[0;31m'
+export RESET='\e[0m';
+export WHITE_ON_GREEN='\e[42m'
+export YELLOW='\033[0;33m'
