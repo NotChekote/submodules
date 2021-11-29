@@ -8,9 +8,7 @@ set -euo pipefail
 # @see https://docs.github.com/en/rest/reference/pulls#get-a-pull-request
 #
 # Globals:
-#   GITHUB_OAUTH
-#   GITHUB_READ_OAUTH
-#   GITHUB_TRIAGE_OAUTH
+#   GITHUB_TOKEN
 #   CIRCLE_PROJECT_USERNAME
 #   CIRCLE_PROJECT_REPONAME
 #   CIRCLE_PR_NUMBER
@@ -19,15 +17,7 @@ set -euo pipefail
 #   The PR details
 #######################################
 github.pull.get () {
-    if [[ -n  ${GITHUB_TRIAGE_OAUTH:=''} ]];
-      then local OAUTH=$GITHUB_TRIAGE_OAUTH
-    elif [[ -n  ${GITHUB_READ_OAUTH:=''} ]];
-      then local OAUTH=$GITHUB_READ_OAUTH
-    else
-      local OAUTH=$GITHUB_OAUTH
-    fi
-
-    curl -H "Authorization: token $OAUTH" -H "Accept: application/vnd.github.shadow-cat-preview+json" \
+    curl -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github.shadow-cat-preview+json" \
         -S "https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/pulls/$CIRCLE_PR_NUMBER"
 }
 
