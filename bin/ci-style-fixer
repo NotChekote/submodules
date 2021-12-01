@@ -46,7 +46,7 @@ get_fixable_files () {
     files="$(git diff --diff-filter=CMTRA --name-only origin/master...HEAD)"
     for file in $files
     do
-      if echo "$file" | grep 'css\|scss\|html\|js\|ts\|php\|java\|feature\|twig'; then
+      if echo "$file" | grep -q 'css\|scss\|html\|js\|ts\|php\|java\|feature\|twig'; then
         fixable_files="$fixable_files $file"
       fi
     done
