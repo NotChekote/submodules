@@ -5,7 +5,7 @@ set -euo pipefail
 root="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../.." && pwd )"
 
 # Include lib functions
-. "$root/submodules/lib/git.sh"
+. "$root/submodules/lib/git.bash"
 
 git.branch.exit-if-master "Skipping directory enforcement"
 

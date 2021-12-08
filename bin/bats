@@ -2,16 +2,18 @@
 
 set -euo pipefail
 
-root="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../../" && pwd )"
+. "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../lib/git.bash"
+git.paths.get
 
 . get_tty
-. "$root/submodules/lib/docker_host_user_id.sh"
+. "$submodules/lib/docker_host_user_id.sh"
 . "$root/docker/lib/volumes.sh"
 
 docker run \
+      -e BATS_ERROR_SUFFIX="" \
       -e LOCAL_USER_ID="$DOCKER_HOST_USER_ID" \
       -i \
       $TTY \
       --mount source="$PROJECT_VOLUME",target=/workdir \
       --rm \
-      us.gcr.io/docker-1000101/bats:php7.3-laravel5.7 bats "$@"
+      us.gcr.io/docker-1000101/bats:1.5.0-php8.0.10-laravel5.7 bats "$@"

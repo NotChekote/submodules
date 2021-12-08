@@ -5,7 +5,7 @@ set -euo pipefail
 submodules="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../" && pwd )"
 
 # Include lib functions
-. "$submodules"/lib/git.sh
+. "$submodules"/lib/git.bash
 . "$submodules"/lib/github.sh
 
 #######################################
