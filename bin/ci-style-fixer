@@ -31,7 +31,7 @@ apply_changes_and_exit () {
     local type="$1"
 
     echo "Found $type changes. Pushing back to branch..."
-    git commit -m "Apply $type changes"
+    git commit --no-verify -m "Apply $type changes"
     git push
     exit 1
 }
