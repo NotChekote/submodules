@@ -18,4 +18,4 @@ docker run \
     --mount source=user_ssh,target=/home/user/.ssh \
     --mount source=user_config,target=/home/user/.config \
     --rm \
-    gcr.io/docker-1000101/hub:2.14.2-a1ab6f08a699bc1c22b131536e4c05db65c53eff "$@"
+    chekote/hub:2.14.2 "$@"
