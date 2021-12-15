@@ -11,6 +11,7 @@ root="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../../" && pwd )"
 # note: The .gitconfig mount cannot use a Docker Volume since it is a file, not a dir.
 docker run \
     -e LOCAL_USER_ID="$DOCKER_HOST_USER_ID" \
+    -e GITHUB_TOKEN \
     -i \
     $TTY \
     -v ~/.gitconfig:/home/user/.gitconfig:delegated \
