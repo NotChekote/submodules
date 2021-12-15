@@ -58,3 +58,23 @@ stop_previous_versions() {
         gcloud -q --verbosity=debug app versions stop --service "$1" "${version}"
     done
 }
+
+######################################################
+# Promotes the current version of service on Google App Engine.
+#
+# Arguments:
+#   1 the name of the service on GAE
+#   2 the version of the service to promote
+######################################################
+promote_version(){
+    echo ""
+    echo "Split traffic to production application"
+    gcloud app services set-traffic "$1" --splits "$2"=100
+
+    # And we also skip the stopping of the main service.
+    echo ""
+    echo "Stopping previous Google App Engine versions for $1"
+    stop_previous_versions "$1"
+}
+
+
