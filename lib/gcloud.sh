@@ -68,13 +68,22 @@ stop_previous_versions() {
 ######################################################
 promote_version(){
     echo ""
-    echo "Split traffic to production application"
+    echo "Split Routing 100% of traffic to version $2 of service $1"
     gcloud app services set-traffic "$1" --splits "$2"=100
-
-    # And we also skip the stopping of the main service.
-    echo ""
-    echo "Stopping previous Google App Engine versions for $1"
     stop_previous_versions "$1"
 }
 
-
+######################################################
+# Deploys a new version of a service into Google App Engine
+#
+# Arguments:
+#   1 the name of the service on GAE
+#   2 the name of the service file
+#   3 the url of the image file
+#   4 the version of the service to promote
+######################################################
+deploy_appengine_service(){
+    echo ""
+    echo "Deploying application $1 to Google App Engine"
+    gcloud app deploy --verbosity=debug "$2" --image-url="$3" --version="$4"
+}
