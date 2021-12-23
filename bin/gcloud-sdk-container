@@ -2,11 +2,12 @@
 
 set -euo pipefail
 
-root="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../../" && pwd )"
+. "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../lib/git.bash"
+git.paths.get
 
 . get_tty
 . "$root/docker/lib/volumes.sh"
-. "$root/submodules/lib/docker_host_user_id.sh"
+. "$submodules/lib/docker_host_user_id.sh"
 
 # We need word-splitting for the -t option to work properly
 # shellcheck disable=SC2086
@@ -19,4 +20,4 @@ docker run \
     --mount source=user_config,target=/home/user/.config \
     --mount source=user_docker,target=/home/user/.docker \
     --rm \
-    chekote/google-cloud-sdk:336.0.0 "$@"
+    chekote/google-cloud-sdk:367.0.0 "$@"
