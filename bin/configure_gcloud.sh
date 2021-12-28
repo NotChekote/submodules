@@ -37,11 +37,11 @@ gcloud config configurations create "$configuration_name" --activate
 echo "Configure account email..."
 gcloud config set account "$service_email"
 
-echo "configure compute zone..."
-gcloud config set compute/zone us-central1-b
-
 echo "Configure core/project..."
 gcloud config set core/project "$project_id"
+
+echo "configure compute zone..."
+gcloud config set compute/zone us-central1-b
 
 echo "Suppress prompts"
 gcloud config set disable_prompts True

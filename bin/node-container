@@ -9,15 +9,14 @@ git.paths.get
 . "$root/docker/lib/volumes.sh"
 . "$submodules/lib/docker_host_user_id.sh"
 
-# note: The .gitconfig mount cannot use a Docker Volume since it is a file, not a dir.
+# We need word-splitting for the -t & -v options to work properly
+# shellcheck disable=SC2086
 docker run \
     -e LOCAL_USER_ID="$DOCKER_HOST_USER_ID" \
-    -e GITHUB_TOKEN \
     -i \
     $TTY \
-    -v ~/.gitconfig:/home/user/.gitconfig:delegated \
+    --env-file docker/.env \
     --mount source="$PROJECT_VOLUME",target=/workdir \
-    --mount source=user_ssh,target=/home/user/.ssh \
-    --mount source=user_config,target=/home/user/.config \
+    --mount source=user_cache,target=/home/node/.cache \
     --rm \
-    chekote/hub:2.14.2 hub "$@"
+    chekote/node:16.13.1-dev-alpine "$@"

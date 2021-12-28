@@ -2,6 +2,12 @@
 
 set -euo pipefail
 
+. "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/git.bash"
+git.paths.get
+
+. "$submodules/lib/dir.bash"
+. "$submodules/lib/file.bash"
+
 #######################################
 # Setup NFS server on Mac
 #######################################
@@ -67,11 +73,10 @@ createDockerVolume() {
 
   echo "Creating Docker Volume ${volume_name} for path ${volume_path}"
 
-  if [[ ! -e "${volume_path}" ]]; then
-    echo "${volume_path} doesn't exist, creating the directory..." 1>&2
-    mkdir "${volume_path}"
-  elif [[ ! -d ${volume_path} ]]; then
-    echo "${volume_path} already exists but is not a directory" 1>&2
+  if [ "${VOLUME_TYPES[$volume_name]}" = "$DIRECTORY" ]; then
+    dir.ensure.exists "$volume_path"
+  else
+    file.ensure.exists "$volume_path"
   fi
 
   if [[ $volume_type = 'nfs' ]]; then

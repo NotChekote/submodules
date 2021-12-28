@@ -2,8 +2,10 @@
 
 set -euo pipefail
 
-root="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../../" && pwd )"
-. "$root/submodules/lib/setup_nfs_functions.sh"
+. "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../lib/git.bash"
+git.paths.get
+
+. "$submodules/lib/setup_nfs_functions.sh"
 . "$root/docker/lib/volumes.sh"
 
 if [[ "$(uname)" == 'Darwin' ]]; then
@@ -20,7 +22,7 @@ fi
 # Loop over each of the volumes
 for volume in "${!VOLUMES[@]}"; do
   # And check if it exists
-  if ! docker volume ls | grep -qF "$volume"; then
+  if ! docker volume inspect "$volume" &> /dev/null; then
     # If not, then create it
     createDockerVolume "$volume" "${VOLUMES[$volume]}" "$type" "${opts}"
   else

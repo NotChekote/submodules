@@ -3,6 +3,28 @@
 set -euo pipefail
 
 #######################################
+# Ensures that the specified file exists
+#
+# Arguments:
+#   1 The path for the file
+# Returns:
+#   0 if the file already exists, or if it is created successfully
+#   1 if the path exists, but it is not a file
+#######################################
+file.ensure.exists() {
+  local file="$1"
+
+  if [[ ! -e "$file" ]]; then
+    echo "$file doesn't exist, creating the file..." 1>&2
+    touch "$file"
+    return 0
+  elif [[ ! -f "$file" ]]; then
+    echo "$file already exists but is not a file" 1>&2
+    return 1
+  fi
+}
+
+#######################################
 # Checks if a file exists and exits
 # if it does not.
 #
