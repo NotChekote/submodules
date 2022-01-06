@@ -55,6 +55,7 @@ stop_previous_versions() {
     for version in $ids
     do
         echo -e "\nStopping version"
+        version="$(echo "$version" | tr -d '\r')"
         gcloud -q --verbosity=debug app versions stop --service "$1" "${version}"
     done
 }
