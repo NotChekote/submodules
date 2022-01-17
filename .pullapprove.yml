@@ -1,5 +1,5 @@
 version: 3
-extends: "https://api.github.com/repos/medology/Scripts/contents/Pull%20Approve/arepa.pullapprove.yml?ref=master"
+extends: "https://api.github.com/repos/medology/Scripts/contents/Pull%20Approve/umami.pullapprove.yml?ref=master"
 pullapprove_conditions:
   - condition: "base.ref == 'master'"
     unmet_status: failure
