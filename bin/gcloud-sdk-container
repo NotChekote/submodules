@@ -20,4 +20,4 @@ docker run \
     --mount source=user_config,target=/home/user/.config \
     --mount source=user_docker,target=/home/user/.docker \
     --rm \
-    chekote/google-cloud-sdk:367.0.0 "$@"
+    chekote/google-cloud-sdk:370.0.0 "$@"
