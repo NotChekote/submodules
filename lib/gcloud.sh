@@ -32,7 +32,7 @@ delete_old_versions() {
   echo "Deleting $limit old versions"
   for version in "${ids[@]::limit}"
   do
-    gcloud app versions delete --service="$service" "$version"
+    gcloud app versions delete --service="$service" "$(echo "$version" | tr -d '\r')"
   done
 }
 
