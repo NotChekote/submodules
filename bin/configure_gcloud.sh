@@ -40,8 +40,12 @@ gcloud config set account "$service_email"
 echo "Configure core/project..."
 gcloud config set core/project "$project_id"
 
-echo "configure compute zone..."
-gcloud config set compute/zone us-central1-b
+if [ -z ${GCLOUD_COMPUTE_ZONE+x} ]; then
+  echo "Skipping compute zone setup. GCLOUD_COMPUTE_ZONE is not set"
+else
+  echo "configure compute zone..."
+  gcloud config set compute/zone "$GCLOUD_COMPUTE_ZONE"
+fi
 
 echo "Suppress prompts"
 gcloud config set disable_prompts True
