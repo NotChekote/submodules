@@ -7,6 +7,7 @@ git.paths.get
 
 . get_tty
 . "$root/docker/lib/volumes.sh"
+. "$submodules/bin/get_docker_network.sh"
 . "$submodules/lib/dir.bash"
 . "$submodules/lib/docker_host_user_id.sh"
 
@@ -25,5 +26,6 @@ docker run \
     --mount source="$PROJECT_VOLUME",target=/workdir \
     --mount source=user_cache,target=/home/node/.cache \
     --mount source=user_npm,target=/home/node/.npm \
+    --net "$DOCKER_NETWORK" \
     --rm \
     chekote/node:16.13.1-dev-alpine "$@"
