@@ -16,8 +16,8 @@ docker run \
     -i \
     $TTY \
     -v ~/.gitconfig:/home/user/.gitconfig:delegated \
+    -v ~/.ssh:/home/user/.ssh:delegated \
     --mount source="$PROJECT_VOLUME",target=/workdir \
-    --mount source=user_ssh,target=/home/user/.ssh \
     --mount source=user_config,target=/home/user/.config \
     --rm \
     chekote/hub:2.14.2 hub "$@"
