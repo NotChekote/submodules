@@ -5,8 +5,8 @@ set -euo pipefail
 . "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/git.bash"
 git.paths.get
 
-. "$submodules/lib/dir.bash"
-. "$submodules/lib/file.bash"
+. "$SUBMODULES/lib/dir.bash"
+. "$SUBMODULES/lib/file.bash"
 
 #######################################
 # Setup NFS server on Mac

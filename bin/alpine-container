@@ -2,11 +2,12 @@
 
 set -euo pipefail
 
-root="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../../" && pwd )"
+. "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../lib/git.bash"
+git.paths.get
 
 . get_tty
-. "$root/submodules/bin/get_docker_network.sh"
-. "$root/docker/lib/volumes.sh"
+. "$ROOT/submodules/bin/get_docker_network.sh"
+. "$ROOT/docker/lib/volumes.sh"
 
 # We need word-splitting for the -t option to work properly
 # shellcheck disable=SC2086
@@ -14,7 +15,7 @@ docker run \
     -i \
     $TTY \
     -w /workdir \
-    --env-file "$root/docker/.env" \
+    --env-file "$ROOT/docker/.env" \
     --mount source=$PROJECT_VOLUME,target=/workdir \
     --net "$DOCKER_NETWORK" \
     --rm \

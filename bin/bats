@@ -6,8 +6,8 @@ set -euo pipefail
 git.paths.get
 
 . get_tty
-. "$submodules/lib/docker_host_user_id.sh"
-. "$root/docker/lib/volumes.sh"
+. "$SUBMODULES/lib/docker_host_user_id.sh"
+. "$ROOT/docker/lib/volumes.sh"
 
 docker run \
       -e BATS_ERROR_SUFFIX="" \

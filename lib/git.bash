@@ -3,10 +3,10 @@
 set -euo pipefail
 
 #######################################
-# Determines root and submodules paths
+# Determines ROOT and submodules paths
 #
 # This method will take into account if the current project is a git submodule, or a git root project.
-# "root" will always resolve to the root project, whereas submodules will either point to the submodules
+# $ROOT will always resolve to the root project, whereas $SUBMODULES will either point to the submodules
 # dir of the root project, or the submodules project itself if it is root.
 #
 # Invoked from Submodules as the root project
@@ -14,22 +14,23 @@ set -euo pipefail
 # Invoked from host project with Submodules as a Git submodule
 #
 # Exports:
-#   root       the path to the root project
-#   submodules the path to the submodules project or git submodule
+#   ROOT       the path to the root project
+#   SUBMODULES the path to the submodules project or git submodule
 #######################################
 git.paths.get () {
     local local_root
     local_root="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../" && pwd )"
 
     if git.repo.isRootSubmodules; then
-      root="$local_root"; submodules="$local_root"
+      ROOT="$local_root"; SUBMODULES="$local_root"
     elif git.repo.isSubmodule; then
-      root="$(git.repo.super)"; submodules="$local_root"
+      ROOT="$(git.repo.super)"; SUBMODULES="$local_root"
     elif git.submodule.contains "submodules"; then
-      root="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../../" && pwd )"; submodules="$root/submodules"
+      ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../../" && pwd )"; SUBMODULES="$ROOT/submodules"
     fi
 
-    export submodules
+    export ROOT
+    export SUBMODULES
 }
 
 #######################################

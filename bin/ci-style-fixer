@@ -2,11 +2,12 @@
 
 set -euo pipefail
 
-submodules="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../" && pwd )"
+. "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../lib/git.bash"
+git.paths.get
 
 # Include lib functions
-. "$submodules"/lib/git.bash
-. "$submodules"/lib/github.sh
+. "$SUBMODULES"/lib/git.bash
+. "$SUBMODULES"/lib/github.sh
 
 #######################################
 # Fix and stage files

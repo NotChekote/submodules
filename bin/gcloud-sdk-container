@@ -6,8 +6,8 @@ set -euo pipefail
 git.paths.get
 
 . get_tty
-. "$root/docker/lib/volumes.sh"
-. "$submodules/lib/docker_host_user_id.sh"
+. "$ROOT/docker/lib/volumes.sh"
+. "$SUBMODULES/lib/docker_host_user_id.sh"
 
 # We need word-splitting for the -t option to work properly
 # shellcheck disable=SC2086
