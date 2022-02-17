@@ -6,9 +6,11 @@ set -euo pipefail
 git.paths.get
 
 . get_tty
-. "$ROOT/docker/lib/volumes.sh"
+. "$ROOT/docker/lib/project_volumes.sh"
 . "$SUBMODULES/lib/docker_host_user_id.sh"
 
+# We need word-splitting for the -t option to work properly
+# shellcheck disable=SC2086
 # note: The .gitconfig mount cannot use a Docker Volume since it is a file, not a dir.
 docker run \
     -e LOCAL_USER_ID="$DOCKER_HOST_USER_ID" \

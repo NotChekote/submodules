@@ -6,7 +6,7 @@ set -euo pipefail
 git.paths.get
 
 . get_tty
-. "$ROOT/docker/lib/volumes.sh"
+. "$ROOT/docker/lib/project_volumes.sh"
 . "$SUBMODULES/bin/get_docker_network.sh"
 . "$SUBMODULES/lib/dir.bash"
 . "$SUBMODULES/lib/docker_host_user_id.sh"
@@ -16,7 +16,7 @@ git.paths.get
 dir.ensure.exists "$HOME/.npm"
 chown "$(whoami):$(id -gn)" "$HOME/.npm"
 
-# We need word-splitting for the -t & -v options to work properly
+# We need word-splitting for the -t option to work properly
 # shellcheck disable=SC2086
 docker run \
     -e CIRCLE_NODE_INDEX \

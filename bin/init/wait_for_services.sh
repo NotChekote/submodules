@@ -13,17 +13,14 @@ set -euo pipefail
 
 root="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../../../" && pwd )"
 
-. "$ROOT/docker/lib/services.sh"
+. "$root/docker/lib/services.sh"
+. get_colors
 
 count=0
 timeout=30
 
 # Associative array mapping service names to statuses
 declare -A service_status
-
-. "$ROOT/bin/lib/env.sh"
-. get_colors
-. get_tty
 
 # List of services passed in by the user, or default to all services
 declare -a services

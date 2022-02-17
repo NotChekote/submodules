@@ -6,7 +6,7 @@ set -euo pipefail
 git.paths.get
 
 . get_tty
-. "$ROOT/docker/lib/volumes.sh"
+. "$ROOT/docker/lib/project_volumes.sh"
 . "$SUBMODULES/lib/docker_host_user_id.sh"
 
 # We need word-splitting for the -t option to work properly

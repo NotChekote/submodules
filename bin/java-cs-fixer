@@ -5,10 +5,12 @@ set -euo pipefail
 . "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../lib/git.bash"
 git.paths.get
 
-. "$ROOT/docker/lib/volumes.sh"
+. "$ROOT/docker/lib/project_volumes.sh"
 . "$ROOT/submodules/lib/docker_host_user_id.sh"
 . get_tty
 
+# We need word-splitting for the -t option to work properly
+# shellcheck disable=SC2086
 docker run \
     -e LOCAL_USER_ID="$DOCKER_HOST_USER_ID" \
     $TTY \

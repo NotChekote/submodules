@@ -11,7 +11,6 @@ VOLUMES["user_docker"]="$HOME/.docker"
 VOLUMES["user_gitconfig"]="$HOME/.gitconfig"
 VOLUMES["user_npm"]="$HOME/.npm"
 VOLUMES["user_wrangler"]="$HOME/.wrangler"
-VOLUMES["submodules_project"]="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../../" && pwd )"
 export VOLUMES
 
 export readonly DIRECTORY=0
@@ -26,7 +25,4 @@ VOLUME_TYPES["user_docker"]=$DIRECTORY
 VOLUME_TYPES["user_gitconfig"]=$FILE
 VOLUME_TYPES["user_npm"]=$DIRECTORY
 VOLUME_TYPES["user_wrangler"]=$DIRECTORY
-VOLUME_TYPES["submodules_project"]=$DIRECTORY
 export VOLUME_TYPES
-
-export PROJECT_VOLUME="submodules_project"

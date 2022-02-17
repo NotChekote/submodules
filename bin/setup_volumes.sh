@@ -6,7 +6,7 @@ set -euo pipefail
 git.paths.get
 
 . "$SUBMODULES/lib/setup_nfs_functions.sh"
-. "$ROOT/docker/lib/volumes.sh"
+. "$ROOT/docker/lib/project_volumes.sh"
 
 if [[ "$(uname)" == 'Darwin' ]]; then
   # On mac, setup NFS server and create NFS volumes

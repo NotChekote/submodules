@@ -2,6 +2,28 @@
 
 set -euo pipefail
 
+
+#######################################
+# Configures git with our default setup
+#
+# This will set the user email, name and ensure Git uses SSH over HTTPS
+#
+# Arguments:
+#   1 The email of the git user
+#   2 The name of the git user
+#######################################
+git.configure () {
+  local email="$1"
+  local name="$2"
+
+  echo "Configure Git user"
+  git config --global user.email "$email"
+  git config --global user.name "$name"
+
+  echo "Configure Git to use SSH instead of HTTP"
+  git config --global url.git@github.com:.insteadOf git://github.com/
+}
+
 #######################################
 # Determines ROOT and submodules paths
 #
