@@ -6,7 +6,7 @@ set -euo pipefail
 git.paths.get
 
 . get_tty
-. "$ROOT/docker/lib/project_volumes.sh"
+. "$ROOT/docker/lib/volumes.sh"
 . "$SUBMODULES/bin/get_docker_network.sh"
 . "$SUBMODULES/lib/dir.bash"
 . "$SUBMODULES/lib/docker_host_user_id.sh"

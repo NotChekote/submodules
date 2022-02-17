@@ -7,7 +7,7 @@ git.paths.get
 
 . get_tty
 . "$ROOT/submodules/bin/get_docker_network.sh"
-. "$ROOT/docker/lib/project_volumes.sh"
+. "$ROOT/docker/lib/volumes.sh"
 
 # We need word-splitting for the -t option to work properly
 # shellcheck disable=SC2086
