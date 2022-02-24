@@ -2,6 +2,11 @@
 
 set -euo pipefail
 
+. "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/git.bash"
+git.paths.get
+
+. "$SUBMODULES/lib/circleci.sh"
+
 #######################################
 # Retrieve the details of the pull request from the github api
 #
@@ -11,14 +16,13 @@ set -euo pipefail
 #   GITHUB_TOKEN
 #   CIRCLE_PROJECT_USERNAME
 #   CIRCLE_PROJECT_REPONAME
-#   CIRCLE_PR_NUMBER
 #
 # Return:
 #   The PR details
 #######################################
 github.pull.get () {
     curl -H "Authorization: token $GITHUB_TOKEN" -H "Accept: application/vnd.github.shadow-cat-preview+json" \
-        -S "https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/pulls/$CIRCLE_PR_NUMBER"
+        -S "https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/pulls/$(circleci.pr.number)"
 }
 
 #######################################

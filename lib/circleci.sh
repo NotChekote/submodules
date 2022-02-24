@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-. "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../lib/git.bash"
+. "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/git.bash"
 git.paths.get
 
 . "$SUBMODULES/lib/mergefreeze.bash"
