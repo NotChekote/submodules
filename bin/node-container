@@ -22,6 +22,8 @@ docker run \
     -e CIRCLE_NODE_INDEX \
     -e CIRCLE_NODE_TOTAL \
     -e LOCAL_USER_ID="$DOCKER_HOST_USER_ID" \
+    -e NETLIFY_AUTH_TOKEN \
+    -e NETLIFY_SITE_ID \
     -i \
     $TTY \
     -v ~/.ssh:/home/node/.ssh \
