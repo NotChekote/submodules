@@ -31,4 +31,4 @@ docker run \
     --mount source=user_npm,target=/home/node/.npm \
     --net "$DOCKER_NETWORK" \
     --rm \
-    chekote/node:16.13.1-dev-alpine "$@"
+    chekote/node:16.14.0-dev-alpine "$@"
