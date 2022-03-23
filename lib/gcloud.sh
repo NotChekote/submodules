@@ -88,3 +88,41 @@ deploy_appengine_service(){
     echo "Deploying application $1 to Google App Engine"
     gcloud app deploy --verbosity=debug "$2" --image-url="$3" --version="$4"
 }
+
+######################################################
+# Waits for the new version of the Google App Engine service version become available
+#
+# Argument options:
+#   -v (version) the version value of the App Engine service URL
+#   -s (subdomain) the full name of the App Engine service URL
+#   -c (custom) the custom url for the health check
+######################################################
+wait_for_appengine_version() {
+  echo -e "${GREEN}Waiting for the instance become healthy$NC"
+  local arg url
+  while getopts 'v:u:s:' arg
+  do
+      case ${arg} in
+          v) url="https://${OPTARG}-dot-$GOOGLE_PROJECT_ID.uc.r.appspot.com/";;
+          s) url="https://${OPTARG}.uc.r.appspot.com/";;
+          c) url=${OPTARG};;
+          *) echo -e "${RED}Illegal option$NC"; return 1
+      esac
+  done
+
+  local i=0
+  local max_retry=100
+  while [ "$i" -lt "$max_retry" ]; do
+    status_code="$(curl -s -o /dev/null -I -w "%{http_code}" "$url")"
+    if [[ "$status_code" == "200" ]]; then
+      echo -e "${GREEN}Healthy (Status: $status_code)$NC"
+      return 0
+    fi
+    ((++i))
+    echo -e "${YELLOW}Not healthy. Retry $i...$NC"
+    sleep 10
+  done
+
+  echo -e "${RED}The server is not becoming healthy. Halting the deployment!$NC"
+  exit 1
+}
