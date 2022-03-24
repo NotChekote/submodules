@@ -1,4 +1,10 @@
 #######################################
+# Library of functions for working with BATS. The Bash Automated Testing System.
+#
+# https://github.com/sstephenson/bats
+#######################################
+
+#######################################
 # Simple mock builder for functions
 #  Mocked function prints out the function name and the passed arguments, input or the custom given value
 #
@@ -39,7 +45,8 @@ bats.pipe() {
 # And loads the source file.
 #######################################
 bats.source.autoload() {
-  local filename="$(echo "$BATS_TEST_DIRNAME" | sed 's#/tests_bash/Unit##' | sed 's#/tests_bash/Integration##').bash"
+  local filename
+  filename="$(echo "$BATS_TEST_DIRNAME" | sed 's#/tests_bash/Unit##' | sed 's#/tests_bash/Integration##').bash"
 
   if [[ ! -f "$filename" ]]; then
     echo "bats: $filename does not exist. Make sure directory structure is correct." >&2
@@ -56,7 +63,7 @@ bats.source.autoload() {
 #   1 a string needs to be validated as function name
 #######################################
 bats.assert.isFunction() {
-  local func=$1
+  local func="$1"
 
   if [ "$func" == "" ] || [ "$(echo "$func" | sed -e 's/[^[:alnum:]_\.]//g')" != "$func" ]; then
     echo "'$func' is not a valid function name" >&2
@@ -82,7 +89,8 @@ bats.mock.stdout() {
     # Mocked function (function name that calls this function)
     local func="${FUNCNAME[1]}"
     # Output contains of func_name and space separated arguments list
-    local arguments_as_string="'$(array.join "', '" ARGS)'"
+    local arguments_as_string
+    arguments_as_string="'$(array.join "', '" ARGS)'"
     local output="$func($arguments_as_string)"
   else
     local output="$1"

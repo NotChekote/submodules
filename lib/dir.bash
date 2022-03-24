@@ -1,6 +1,6 @@
-#!/bin/bash
-
-set -euo pipefail
+#######################################
+# Library of functions for working with directories.
+#######################################
 
 #######################################
 # Ensures that the specified directory exists

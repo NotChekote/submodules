@@ -1,4 +1,8 @@
 #######################################
+# Library of functions for working with Bash strings.
+#######################################
+
+#######################################
 # Trims leading spaces from a provided string.
 #######################################
 string.ltrim() {
@@ -41,7 +45,8 @@ string.sed.regex.escape() {
 #   2 length of the output hash [Optional] [Default=10, Min=1, Max=64]
 #######################################
 string.hash() {
-  local value=$(echo -n "$1" | sha256sum)
+  local value
+  value=$(echo -n "$1" | sha256sum)
   local length=${2:-10}
 
   [[ $length -lt 1 ]] && length=1;

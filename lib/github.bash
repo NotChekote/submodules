@@ -1,11 +1,13 @@
-#!/usr/bin/env bash
-
-set -euo pipefail
+#######################################
+# Library of functions for working with GitHub.
+#
+# https://github.com/
+#######################################
 
 . "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/git.bash"
 git.paths.get
 
-. "$SUBMODULES/lib/circleci.sh"
+. "$SUBMODULES/lib/circleci.bash"
 
 #######################################
 # Retrieve the details of the pull request from the github api

@@ -1,4 +1,10 @@
 #######################################
+# Library of functions for working with Bash arrays
+#
+# https://www.gnu.org/software/bash/manual/html_node/Arrays.html
+#######################################
+
+#######################################
 # Glue the given array elements by the given delimiter.
 #
 # Arguments:

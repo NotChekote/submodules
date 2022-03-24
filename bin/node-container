@@ -9,7 +9,7 @@ git.paths.get
 . "$ROOT/docker/lib/volumes.sh"
 . "$SUBMODULES/bin/get_docker_network.sh"
 . "$SUBMODULES/lib/dir.bash"
-. "$SUBMODULES/lib/docker_host_user_id.sh"
+. "$SUBMODULES/lib/docker.bash"
 
 # Ensure .npm directory exists before attempting to mount it. Otherwise, if we attempt to mount it and it does *NOT*
 # exist, it will get created owned by root, and the user in the Docker container won't have the necessary access.
@@ -21,7 +21,7 @@ chown "$(whoami):$(id -gn)" "$HOME/.npm"
 docker run \
     -e CIRCLE_NODE_INDEX \
     -e CIRCLE_NODE_TOTAL \
-    -e LOCAL_USER_ID="$DOCKER_HOST_USER_ID" \
+    -e LOCAL_USER_ID="$(docker.host.user.id)" \
     -e NETLIFY_AUTH_TOKEN \
     -e NETLIFY_SITE_ID \
     -i \

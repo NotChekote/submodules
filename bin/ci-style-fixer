@@ -7,7 +7,7 @@ git.paths.get
 
 # Include lib functions
 . "$SUBMODULES"/lib/git.bash
-. "$SUBMODULES"/lib/github.sh
+. "$SUBMODULES"/lib/github.bash
 
 #######################################
 # Fix and stage files

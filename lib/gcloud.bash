@@ -1,6 +1,8 @@
-#!/usr/bin/env bash
-
-set -euo pipefail
+#######################################
+# Library of functions for working with the Google Cloud Platform.
+#
+# https://cloud.google.com/
+#######################################
 
 ######################################################
 # Delete old versions of service on Google App Engine.

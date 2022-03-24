@@ -1,6 +1,6 @@
-#!/bin/bash
-
-set -euo pipefail
+#######################################
+# Library of functions for working with files.
+#######################################
 
 #######################################
 # Ensures that the specified file exists
@@ -25,6 +25,57 @@ file.ensure.exists() {
 }
 
 #######################################
+# Checks if a file contains a specific line
+#
+# Arguments:
+#   1 the line to check for
+#   2 the path of the file to check
+#######################################
+file.has.line() {
+  local line="$1"
+  local file="$2"
+
+  grep -qF -- "$line" "$file"
+
+  return $?
+}
+
+#######################################
+# Ensure a file contains a specific line via sudo
+#
+# Arguments:
+#   1 message to output
+#   2 the line to write
+#   3 the file path
+#######################################
+file.sudo.ensure.has.line() {
+  local message="$1"
+  local line="$2"
+  local file="$3"
+
+  if file.has.line "$line" "$file"; then
+    echo " - $message already exists on $file, skipping..."
+  else
+    echo " - $message"
+    file.sudo.write.line "$line" "$file"
+  fi
+}
+
+#######################################
+# Writes a line to a file using sudo
+#
+# Arguments:
+#   1 the line to write
+#   2 the path of the file to write to
+#######################################
+file.sudo.write.line() {
+  local line="$1"
+  local file="$2"
+
+  echo "$line" | sudo tee -a "$file" > /dev/null
+}
+
+#######################################
 # Checks if a file exists and exits
 # if it does not.
 #
@@ -32,7 +83,7 @@ file.ensure.exists() {
 #   1 the line number within the scenario
 #######################################
 exit_if_file_does_not_exist() {
-  local file=$1
+  local file="$1"
 
   if [ ! -f "$file" ]; then
       echo "$file does not exist."
@@ -48,7 +99,7 @@ exit_if_file_does_not_exist() {
 #   1 the file to determine the line count of
 #######################################
 get_file_line_count() {
-  local file=$1
+  local file="$1"
 
   exit_if_file_does_not_exist "$file"
 
@@ -62,8 +113,8 @@ get_file_line_count() {
 #   1 the string to compare
 #######################################
 is_string_a_scenario_title() {
-  local line_contents=$1
-  if [[ $line_contents == "  Scenario: "* || $line_contents == "  Scenario Outline: "* ]]; then
+  local line_contents="$1"
+  if [[ "$line_contents" == "  Scenario: "* || "$line_contents" == "  Scenario Outline: "* ]]; then
     echo "true"
   else
     echo "false"
@@ -79,29 +130,29 @@ is_string_a_scenario_title() {
 #   2 the file to search within
 #######################################
 get_scenario_by_line_number_of_feature_file() {
-  local line_number=$1
-  local file=$2
+  local line_number="$1"
+  local file="$2"
 
   # We're just using this as a label for the infinite loop. So the constant is intentional.
   # shellcheck disable=SC2078
   while [[ 'A Scenario or the Background has not been found' ]]; do
-    if [[ $line_number == '0' ]]; then
+    if [[ "$line_number" == '0' ]]; then
       break
     fi
 
-    line_contents=$(sed "${line_number}q;d" "$file")
+    line_contents="$(sed "${line_number}q;d" "$file")"
 
-    if [[ $line_contents == "  Scenario: "* || $line_contents == "  Scenario Outline: "* ]]; then
+    if [[ "$line_contents" == "  Scenario: "* || "$line_contents" == "  Scenario Outline: "* ]]; then
       echo "${line_contents/*: /}"
       break
     fi
 
-    if [[ $line_contents == "  Background:"* ]]; then
+    if [[ "$line_contents" == "  Background:"* ]]; then
       echo "$file"
       break
     fi
 
-    line_number=$((line_number-1))
+    line_number="$((line_number-1))"
   done
 }
 
@@ -112,7 +163,7 @@ get_scenario_by_line_number_of_feature_file() {
 #   1 the file to retrieve scenarios from
 #######################################
 get_scenarios_from_file() {
-  local file=$1
+  local file="$1"
 
   exit_if_file_does_not_exist "$file"
 
@@ -125,10 +176,10 @@ get_scenarios_from_file() {
       echo "${line_contents/*: /}"
     fi
 
-    if [[ $line_contents == "  Background:"* ]]; then
+    if [[ "$line_contents" == "  Background:"* ]]; then
       break
     fi
 
-    current_line=$((current_line-1))
+    current_line="$((current_line-1))"
   done
 }

@@ -1,7 +1,8 @@
-#!/usr/bin/env bash
-
-set -euo pipefail
-
+#######################################
+# Library of functions for working with the Git version control system.
+#
+# https://git-scm.com/
+#######################################
 
 #######################################
 # Configures git with our default setup

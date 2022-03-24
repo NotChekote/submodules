@@ -7,13 +7,13 @@ git.paths.get
 
 . get_tty
 . "$ROOT/docker/lib/volumes.sh"
-. "$SUBMODULES/lib/docker_host_user_id.sh"
+. "$SUBMODULES/lib/docker.bash"
 
 # We need word-splitting for the -t option to work properly
 # shellcheck disable=SC2086
 # note: The .gitconfig mount cannot use a Docker Volume since it is a file, not a dir.
 docker run \
-    -e LOCAL_USER_ID="$DOCKER_HOST_USER_ID" \
+    -e LOCAL_USER_ID="$(docker.host.user.id)" \
     -e GITHUB_TOKEN \
     -i \
     $TTY \

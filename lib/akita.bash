@@ -1,6 +1,8 @@
-#!/usr/bin/env bash
-
-set -euo pipefail
+#######################################
+# Library of functions for the Akita Observability tool
+#
+# https://www.akitasoftware.com/
+#######################################
 
 . "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/git.bash"
 git.paths.get

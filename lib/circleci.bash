@@ -1,6 +1,8 @@
-#!/usr/bin/env bash
-
-set -euo pipefail
+#######################################
+# Library of functions for working with CircleCI.
+#
+# https://circleci.com/
+#######################################
 
 . "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/git.bash"
 git.paths.get

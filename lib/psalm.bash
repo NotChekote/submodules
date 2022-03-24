@@ -1,13 +1,15 @@
-#!/usr/bin/env bash
-
-set -euo pipefail
+#######################################
+# Library of functions for working with Psalm. The static analysis tool for PHP.
+#
+# https://psalm.dev/
+#######################################
 
 . "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/git.bash"
 git.paths.get
 
 # Include lib functions
 . "$SUBMODULES/lib/git.bash"
-. "$SUBMODULES/lib/github.sh"
+. "$SUBMODULES/lib/github.bash"
 
 #######################################
 # Update the Psalm baseline and pushes the changes.

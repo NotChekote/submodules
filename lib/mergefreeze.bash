@@ -1,6 +1,8 @@
-#!/usr/bin/env bash
-
-set -euo pipefail
+#######################################
+# Library of functions for working with MergeFreeze.
+#
+# https://www.mergefreeze.com/
+#######################################
 
 #######################################
 # Gets the Target URL for the Mergefreeze API of this branch
