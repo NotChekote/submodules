@@ -99,17 +99,16 @@ deploy_appengine_service(){
 #   -s (subdomain) the full name of the App Engine service URL
 #   -c (custom) the custom url for the health check
 ######################################################
-wait_for_appengine_version() {
-  echo -e "${GREEN}Waiting for the instance become healthy$NC"
-  local arg url
-  while getopts 'v:u:s:' arg
-  do
-      case ${arg} in
-          v) url="https://${OPTARG}-dot-$GOOGLE_PROJECT_ID.uc.r.appspot.com/";;
-          s) url="https://${OPTARG}.uc.r.appspot.com/";;
-          c) url=${OPTARG};;
-          *) echo -e "${RED}Illegal option$NC"; return 1
+app_engine.wait_for() {
+  echo ""
+  echo "Waiting for the instance become healthy"
+  while [[ $# -gt 0 ]]; do
+      case $1 in
+          --service) url="https://${2}.uc.r.appspot.com/";;
+          --custom_url) url="$2";;
+          *) echo "Illegal option $2"; return 1
       esac
+      shift 2
   done
 
   local i=0
@@ -117,14 +116,14 @@ wait_for_appengine_version() {
   while [ "$i" -lt "$max_retry" ]; do
     status_code="$(curl -s -o /dev/null -I -w "%{http_code}" "$url")"
     if [[ "$status_code" == "200" ]]; then
-      echo -e "${GREEN}Healthy (Status: $status_code)$NC"
+      echo "Healthy (Status: $status_code)"
       return 0
     fi
     ((++i))
-    echo -e "${YELLOW}Not healthy. Retry $i...$NC"
+    echo "Not healthy. Retry $i..."
     sleep 10
   done
 
-  echo -e "${RED}The server is not becoming healthy. Halting the deployment!$NC"
+  echo "The server is not becoming healthy. Halting the deployment!"
   exit 1
 }
