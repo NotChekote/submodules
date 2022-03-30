@@ -127,3 +127,23 @@ app_engine.wait_for() {
   echo "The server is not becoming healthy. Halting the deployment!"
   exit 1
 }
+
+######################################################
+# Retrieves the value of the given secret/version combination from Project Secret Manager
+#
+# Arguments:
+#   1 the name of the secret
+#   2 the version for the secret (default: latest)
+######################################################
+gcloud.secret_manager.api.get() {
+  local project=$(gcloud config list --format 'value(core.project)')
+  local key=$1
+  local version=${2:-latest}
+
+  curl "https://secretmanager.googleapis.com/v1/projects/$project/secrets/$key/versions/$version:access" \
+      --request "GET" \
+      --header "authorization: Bearer $(gcloud auth print-access-token)" \
+      --header "content-type: application/json" \
+      --silent \
+      | jq -r ".payload.data" | base64 --decode
+}
