@@ -1,0 +1,64 @@
+{
+  "blocks": [
+    {
+      "type": "header",
+      "text": {
+        "type": "plain_text",
+        "text": ":red_circle: Deployment Failed ($CIRCLE_PROJECT_REPONAME)",
+        "emoji": true
+      }
+    },
+    {
+      "type": "section",
+      "fields": [
+        {
+          "type": "mrkdwn",
+          "text": "*PR Author*:   <$PR_AUTHOR_URL|$PR_AUTHOR_NAME> :point_left:\n\n*Pull Request*:   <$PR_URL|$CIRCLE_PROJECT_REPONAME/pulls/$PR_NUMBER>\n\n*Deployed by*:   $CIRCLE_USERNAME\n"
+        }
+      ],
+      "accessory": {
+        "type": "image",
+        "image_url": "https://user-images.githubusercontent.com/52429111/136821926-b528c724-5521-488f-a687-bf0313a17ef3.gif",
+        "alt_text": "Shame"
+      }
+    },
+    {
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": ":circle-ci: Go to Failed Job"
+          },
+          "style": "primary",
+          "url": "$CIRCLE_BUILD_URL"
+        },
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": ":github-white: Go to PR"
+          },
+          "url": "$PR_AUTHOR_URL"
+        },
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": ":merge-freeze: Freeze merging"
+          },
+          "url": "https://www.mergefreeze.com/branches"
+        },
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": ":croissant: Buy breakfast"
+          },
+          "url": "https://www.ubereats.com/"
+        }
+      ]
+    }
+  ]
+}
